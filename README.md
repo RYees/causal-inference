@@ -2,7 +2,7 @@
 Causal inference refers to an intellectual discipline that considers the assumptions, study designs, and estimation strategies that allow researchers to draw causal conclusions based on data. 
 
 # Table of content
-* [Overview](#overview of Business need)
+* [Overview](#overview)
 * [Introduction](#introduction)
 * [Workflow](#workflow)
 * [Installation](#installation)
