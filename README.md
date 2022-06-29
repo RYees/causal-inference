@@ -22,7 +22,7 @@ As indicated in the overview this project The main objective of the task is to h
 
 
 ## Workflow
-Steps done to do the project:
+Steps to do the project:
 * Data Exploration. 
    * perfoming EDA
    * feature extraction and scaling
