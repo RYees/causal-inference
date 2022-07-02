@@ -14,17 +14,21 @@ class dataHandler:
             self.logger.exception(
                 'Failed to Instantiate Preprocessing Class Object')
             sys.exit(1)
-    def standardize_columns(df, column) -> pd.DataFrame:
+    def standardize_columns(self, df, column) -> pd.DataFrame:
         try:
             std_column_df = pd.DataFrame(df[column])
             std_column_values = std_column_df.values
             min_max_scaler = preprocessing.MinMaxScaler()
             scaled_array = min_max_scaler.fit_transform(std_column_values)
             df[column] = scaled_array
-            print('Successfull data scaling')
+            
+            self.logger.info(
+                'Successfull data scaling')
             return df.head()
         except:
-            print('error in scaling data')
+            # print('error in scaling data')
+            self.logger.info(
+                'error in scaling data')
 
     
 
