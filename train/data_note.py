@@ -17,10 +17,22 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from IPython.display import Image
+import mlflow.sklearn
+import mlflow
+from urllib.parse import urlparse
 # import warnings library
 import warnings
 # ignore all warnings
 warnings.filterwarnings('ignore')
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../scripts')))
+
+from preprocess import Preprocess
+from ml import Ml
+
+ml = Ml()
+preprocess = Preprocess()
+
 
 
 # %%
@@ -677,3 +689,65 @@ print('Precision: {:.2f} '.format(precision_score(y_true=true, y_pred=pred)))
 # Accuracy of 87% come using the variables selected by the causual graph
 
 
+
+
+mlflow.set_experiment('data analysis')
+
+if __name__ == '__main__':
+    warnings.filterwarnings("ignore")
+    mlflow.log_param('data_url', data)
+    mlflow.log_param('input_rows', data.shape[0])
+    mlflow.log_param('input_cols', data.shape[1])
+    mlflow.log_param('model_type','Logistic Regression')
+    mlflow.log_param('model_parameters', 'n_estimators=100, max_depth=10')
+
+    # use logistic regression
+    logistic_regression_model = LogisticRegression(random_state=0)
+
+    logistic_regression_result = ml.cross_validation(logistic_regression_model, X, y, 5)
+
+    # Write scores to file
+    with open("train/logistic_metrics.txt", 'w') as outfile:
+        outfile.write(
+            f"Training data accuracy: {logistic_regression_result['Training Recall scores'][0]}")
+        outfile.write(
+            f"Validation data accuracy: {logistic_regression_result['Validation f1 scores'][0]}")
+        outfile.write(
+            f"Validation data accuracy: {logistic_regression_result['Validation Accuracy scores'][0]}")
+        outfile.write(
+            f"Validation data accuracy: {logistic_regression_result['Validation precision scores'][0]}")
+
+
+    # Plot accuacy results to cml
+
+    # Plot Accuracy Result
+    model_name = "Logistic Regression"
+    ml.plot_result(model_name, "Accuracy", "Accuracy scores in 5 Folds",
+                logistic_regression_result["Training Accuracy scores"],
+                logistic_regression_result["Validation Accuracy scores"],
+                'train/logistic_accuracy.png')
+
+    # Precision Results
+
+    # Plot Precision Result
+    ml.plot_result(model_name, "Precision", "Precision scores in 5 Folds",
+                logistic_regression_result["Training Precision scores"],
+                logistic_regression_result["Validation Precision scores"],
+                'train/logistic_preicision.png')
+
+    # Recall Results plot
+
+    # Plot Recall Result
+    ml.plot_result(model_name, "Recall", "Recall scores in 5 Folds",
+                logistic_regression_result["Training Recall scores"],
+                logistic_regression_result["Validation Recall scores"],
+                'train/logistic_recall.png')
+
+
+    # f1 Score Results
+
+    # Plot F1-Score Result
+    ml.plot_result(model_name, "F1", "F1 Scores in 5 Folds",
+                logistic_regression_result["Training F1 scores"],
+                logistic_regression_result["Validation F1 scores"],
+                'train/logistic_f1_score.png')
