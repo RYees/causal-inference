@@ -695,9 +695,9 @@ mlflow.set_experiment('data analysis')
 
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
-    mlflow.log_param('data_url', data)
-    mlflow.log_param('input_rows', data.shape[0])
-    mlflow.log_param('input_cols', data.shape[1])
+    mlflow.log_param('data_url', x_2)
+    mlflow.log_param('input_rows', x_2.shape[0])
+    mlflow.log_param('input_cols', x_2.shape[1])
     mlflow.log_param('model_type','Logistic Regression')
     mlflow.log_param('model_parameters', 'n_estimators=100, max_depth=10')
 
